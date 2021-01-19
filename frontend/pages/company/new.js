@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { gql, useMutation } from '@apollo/client';
+import { COMPANY_LIST } from '../../queries/company';
 
 const ADD_COMPANY = gql`
   mutation AddCompany($name: String!, $description: String) {
@@ -24,7 +25,10 @@ const New = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    addCompany({ variables: { name, description } });
+    addCompany({
+      variables: { name, description },
+      refetchQueries: [{ query: COMPANY_LIST }],
+    });
     setName('');
     setDescription('');
     router.push('/');

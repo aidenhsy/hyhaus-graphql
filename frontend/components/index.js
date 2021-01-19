@@ -1,5 +1,5 @@
-import CompanyList from './CompanyList/CompanyList';
+import UserCreate from './UserCreate/UserCreate';
 
 export default {
-  CompanyList,
+  UserCreate,
 };

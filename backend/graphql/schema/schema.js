@@ -7,7 +7,6 @@ const {
   GraphQLNonNull,
 } = require('graphql');
 
-const axios = require('axios');
 const Company = require('../../models/Company');
 const User = require('../../models/User');
 
@@ -20,7 +19,7 @@ const CompanyType = new GraphQLObjectType({
     users: {
       type: new GraphQLList(UserType),
       resolve(parentValue, args) {
-        return User.findUsers(parentValue._id);
+        return User.find((_id = parentValue._id));
       },
     },
   }),
@@ -79,14 +78,13 @@ const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     addUser: {
-      type: UserType,
+      type: CompanyType,
       args: {
         firstName: { type: new GraphQLNonNull(GraphQLString) },
         age: { type: new GraphQLNonNull(GraphQLInt) },
         company: { type: GraphQLString },
       },
       resolve(parentValue, { firstName, age, company }) {
-        console.log(parentValue);
         return User.create({ firstName, age, company });
       },
     },
@@ -98,6 +96,13 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, { name, description }) {
         return Company.create({ name, description });
+      },
+    },
+    deleteCompany: {
+      type: CompanyType,
+      args: { _id: { type: new GraphQLNonNull(GraphQLString) } },
+      resolve(parentValue, { _id }) {
+        return Company.remove({ _id });
       },
     },
   },
